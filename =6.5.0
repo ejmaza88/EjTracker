@@ -1,0 +1,3 @@
+Requirement already satisfied: PyQt6 in ./venv/lib/python3.12/site-packages (6.9.0)
+Requirement already satisfied: PyQt6-sip<14,>=13.8 in ./venv/lib/python3.12/site-packages (from PyQt6) (13.10.0)
+Requirement already satisfied: PyQt6-Qt6<6.10.0,>=6.9.0 in ./venv/lib/python3.12/site-packages (from PyQt6) (6.9.0)
