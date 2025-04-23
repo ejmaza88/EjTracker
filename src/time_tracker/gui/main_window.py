@@ -53,13 +53,16 @@ class TimeTrackerWindow(QMainWindow):
         content.setStyleSheet("background-color: #3A3A47; color: white;")
         content_layout = QVBoxLayout(content)
         content_layout.setContentsMargins(20, 20, 20, 20)
-        content_layout.setSpacing(10)
+        # Reduce spacing between items in the main layout
+        content_layout.setSpacing(5)
         
         # Time information
         time_layout = QHBoxLayout()
+        time_layout.setSpacing(5)
         
         # Start time
         start_layout = QVBoxLayout()
+        start_layout.setSpacing(2)  # Tight spacing between label and value
         start_label = QLabel("Start Time:")
         start_label.setStyleSheet("font-size: 14px;")
         start_value = QLabel(self.start_time_str)
@@ -69,6 +72,7 @@ class TimeTrackerWindow(QMainWindow):
         
         # End time
         end_layout = QVBoxLayout()
+        end_layout.setSpacing(2)  # Tight spacing between label and value
         end_label = QLabel("End Time:")
         end_label.setStyleSheet("font-size: 14px;")
         end_value = QLabel(self.end_time_str)
@@ -82,29 +86,29 @@ class TimeTrackerWindow(QMainWindow):
         
         # Total time
         total_label = QLabel("Total Time:")
-        total_label.setStyleSheet("font-size: 14px; margin-top: 10px;")
+        total_label.setStyleSheet("font-size: 14px;")
+        content_layout.addWidget(total_label)
+        
         total_value = QLabel(self.total_time_str)
         total_value.setStyleSheet("font-size: 14px;")
-        content_layout.addWidget(total_label)
         content_layout.addWidget(total_value)
+        total_value.setContentsMargins(0, 0, 0, 2)  # Add a small bottom margin
         
-        # Work done
+        # Work done - directly add widgets to content layout
         work_label = QLabel("Work Done:")
-        work_label.setStyleSheet("font-size: 14px; margin-top: 15px;")
+        work_label.setStyleSheet("font-size: 14px;")
+        # Set a small top margin to create separation
+        work_label.setContentsMargins(0, 3, 0, 0)
         content_layout.addWidget(work_label)
         
         self.work_edit = QTextEdit()
         self.work_edit.setStyleSheet("background-color: #2D2D38; color: white; border: 1px solid #555;")
-        # Increase text area height to utilize space gained from header
         self.work_edit.setFixedHeight(170)
+        # No margin for the text edit
+        self.work_edit.setContentsMargins(0, 0, 0, 0)
         content_layout.addWidget(self.work_edit)
         
-        # Add a spacer to push buttons down
-        button_spacer = QWidget()
-        button_spacer.setFixedHeight(10)
-        content_layout.addWidget(button_spacer)
-        
-        # Buttons
+        # Button section
         button_layout = QHBoxLayout()
         
         # Cancel button
@@ -145,6 +149,8 @@ class TimeTrackerWindow(QMainWindow):
         button_layout.addStretch()
         button_layout.addWidget(self.save_btn)
         
+        # Add some spacing before buttons
+        content_layout.addSpacing(5)
         content_layout.addLayout(button_layout)
         main_layout.addWidget(content)
         
