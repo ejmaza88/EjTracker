@@ -22,10 +22,10 @@ def draw_play(draw):
     # Draw a play triangle with very light color (almost white)
     draw.polygon([(7, 5), (7, 17), (17, 11)], fill=(240, 240, 240, 255))
 
-# Create stop icon with much lighter color for dark mode
+# Create stop icon with red color
 def draw_stop(draw):
-    # Draw a stop square with very light color (almost white)
-    draw.rectangle([(7, 7), (15, 15)], fill=(240, 240, 240, 255))
+    # Draw a stop square with red color
+    draw.rectangle([(7, 7), (15, 15)], fill=(255, 59, 48, 255))
 
 # Create the icons
 create_icon("play", draw_play)
