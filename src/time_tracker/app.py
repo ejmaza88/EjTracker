@@ -30,7 +30,8 @@ class TimeTrackerApp(rumps.App):
         self.menu.add(tracking_item)
         
         # Add quit button with proper label
-        self.menu.add(rumps.MenuItem("Quit", callback=rumps.quit_application))
+        quit_item = rumps.MenuItem("Quit", callback=self.quit_app)
+        self.menu.add(quit_item)
         
         self.time_manager = TimeManager()
         self.update_menu()
@@ -71,6 +72,17 @@ class TimeTrackerApp(rumps.App):
         
         # Update menu text and icon
         self.update_menu()
+    
+    def quit_app(self, _):
+        """Custom quit handler to ensure tracking is stopped before quitting"""
+        # If tracking is active, stop it before quitting
+        if self.time_manager.is_tracking():
+            start_time, end_time = self.time_manager.stop_tracking()
+            # Optionally show the tracker window when quitting while tracking
+            self.show_tracker_window(start_time, end_time)
+        
+        # Quit the application
+        rumps.quit_application()
     
     def show_tracker_window(self, start_time, end_time):
         """Show the tracker window with PyQt"""
