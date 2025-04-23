@@ -17,15 +17,15 @@ def create_icon(filename, draw_function, background=(0, 0, 0, 0)):
     img.save(f"resources/icons/menubar/{filename}.png")
     print(f"Created {filename}.png")
 
-# Create play icon
+# Create play icon with much lighter color for dark mode
 def draw_play(draw):
-    # Draw a play triangle
-    draw.polygon([(7, 5), (7, 17), (17, 11)], fill=(50, 50, 50, 255))
+    # Draw a play triangle with very light color (almost white)
+    draw.polygon([(7, 5), (7, 17), (17, 11)], fill=(240, 240, 240, 255))
 
-# Create stop icon
+# Create stop icon with much lighter color for dark mode
 def draw_stop(draw):
-    # Draw a stop square
-    draw.rectangle([(7, 7), (15, 15)], fill=(50, 50, 50, 255))
+    # Draw a stop square with very light color (almost white)
+    draw.rectangle([(7, 7), (15, 15)], fill=(240, 240, 240, 255))
 
 # Create the icons
 create_icon("play", draw_play)
