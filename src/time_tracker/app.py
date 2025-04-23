@@ -1,5 +1,6 @@
 import rumps
 import sys
+import os
 from PyQt6.QtWidgets import QApplication
 from datetime import datetime
 from time_tracker.utils.time_manager import TimeManager
@@ -7,10 +8,17 @@ from time_tracker.gui.main_window import TimeTrackerWindow
 
 class TimeTrackerApp(rumps.App):
     def __init__(self):
-        # Initialize with an empty menu first
+        # Get the path to the icons
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        icon_dir = os.path.join(base_dir, "resources", "icons", "menubar")
+        self.play_icon = os.path.join(icon_dir, "play.png")
+        self.stop_icon = os.path.join(icon_dir, "stop.png")
+        
+        # Initialize with the play icon
         super().__init__(
-            "⏱️ ▶️",     # App name/icon with play button
-            menu=[],      # Start with empty menu
+            name="Time Tracker",
+            icon=self.play_icon,
+            menu=[],
             quit_button=None  # Disable default quit button so we can add our own
         )
         
@@ -31,8 +39,8 @@ class TimeTrackerApp(rumps.App):
         """Update both the icon and menu text based on tracking state"""
         is_tracking = self.time_manager.is_tracking()
         
-        # Update icon - use square button when tracking, play button when not
-        self.title = "⏱️ ⏹️" if is_tracking else "⏱️ ▶️"
+        # Update icon - use stop icon when tracking, play icon when not
+        self.icon = self.stop_icon if is_tracking else self.play_icon
         
         # Update menu text - correct approach to modify rumps menu items
         new_action_name = "Stop Tracking" if is_tracking else "Start Tracking"
@@ -60,9 +68,6 @@ class TimeTrackerApp(rumps.App):
         else:
             # Start tracking
             self.time_manager.start_tracking()
-            # Flash the menu bar icon briefly for feedback
-            self.title = "⏱️ ▶️"
-            rumps.Timer(lambda _: self.update_menu(), 1).start()
         
         # Update menu text and icon
         self.update_menu()
