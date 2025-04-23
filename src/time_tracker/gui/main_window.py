@@ -14,8 +14,8 @@ class TimeTrackerWindow(QMainWindow):
         # Convert times to readable format with AM/PM
         self.start_time = start_time
         self.end_time = end_time
-        self.start_time_str = start_time.strftime("%Y-%m-%d %I:%M %p")
-        self.end_time_str = end_time.strftime("%Y-%m-%d %I:%M %p")
+        self.start_time_str = start_time.strftime("%m/%d/%Y %I:%M %p")
+        self.end_time_str = end_time.strftime("%m/%d/%Y %I:%M %p")
         
         # Calculate duration in minutes
         duration = end_time - start_time
@@ -155,8 +155,8 @@ class TimeTrackerWindow(QMainWindow):
         
         # Prepare data for CSV
         data = [
-            self.start_time.strftime("%Y-%m-%d %I:%M %p"),
-            self.end_time.strftime("%Y-%m-%d %I:%M %p"),
+            self.start_time_str,
+            self.end_time_str,
             self.total_time_str,
             work_description
         ]
