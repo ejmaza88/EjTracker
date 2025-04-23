@@ -9,7 +9,7 @@ class TimeTrackerApp(rumps.App):
     def __init__(self):
         # Initialize with an empty menu first
         super().__init__(
-            "⏱️",         # App name/icon
+            "⏱️ ▶️",     # App name/icon with play button
             menu=[],      # Start with empty menu
             quit_button=None  # Disable default quit button so we can add our own
         )
@@ -31,8 +31,8 @@ class TimeTrackerApp(rumps.App):
         """Update both the icon and menu text based on tracking state"""
         is_tracking = self.time_manager.is_tracking()
         
-        # Update icon
-        self.title = "⏱️ 🔴" if is_tracking else "⏱️"
+        # Update icon - use square button when tracking, play button when not
+        self.title = "⏱️ ⏹️" if is_tracking else "⏱️ ▶️"
         
         # Update menu text - correct approach to modify rumps menu items
         new_action_name = "Stop Tracking" if is_tracking else "Start Tracking"
