@@ -7,17 +7,19 @@ from time_tracker.gui.main_window import TimeTrackerWindow
 
 class TimeTrackerApp(rumps.App):
     def __init__(self):
-        # Create menu with a tracking action initially set to "Start Tracking"
-        menu = ["Start Tracking"]
-        
+        # Initialize with an empty menu first
         super().__init__(
             "⏱️",         # App name/icon
-            menu=menu,    # Menu items
+            menu=[],      # Start with empty menu
             quit_button=None  # Disable default quit button so we can add our own
         )
         
         # Store action name to avoid duplicates
         self.tracking_action_name = "Start Tracking"
+        
+        # Add the tracking menu item with a proper callback
+        tracking_item = rumps.MenuItem(self.tracking_action_name, callback=self.toggle_tracking)
+        self.menu.add(tracking_item)
         
         # Add quit button with proper label
         self.menu.add(rumps.MenuItem("Quit", callback=rumps.quit_application))
@@ -43,8 +45,8 @@ class TimeTrackerApp(rumps.App):
             # Add new menu item with updated title at the beginning
             new_item = rumps.MenuItem(new_action_name, callback=self.toggle_tracking)
             
-            # Insert at the beginning
-            self.menu.insert_before(self.menu.keys()[0], new_item)
+            # Insert at the beginning (before the Quit item)
+            self.menu.insert_before("Quit", new_item)
             
             # Update stored action name
             self.tracking_action_name = new_action_name
