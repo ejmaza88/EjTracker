@@ -106,7 +106,7 @@ class DashboardWindow(QMainWindow):
         # Add filter layout to content layout
         content_layout.addLayout(filter_layout)
         
-        # Create tab widget
+        # Create tab widget with left alignment for tabs
         self.tab_widget = QTabWidget()
         self.tab_widget.setStyleSheet("""
             QTabWidget::pane {
@@ -128,6 +128,10 @@ class DashboardWindow(QMainWindow):
                 background-color: #3A3A47;
             }
         """)
+        # Set tab position to the left
+        self.tab_widget.setTabPosition(QTabWidget.TabPosition.North)
+        # Set tab alignment to left
+        self.tab_widget.tabBar().setExpanding(False)
         
         # Create aggregate tab
         aggregate_tab = QWidget()
@@ -208,16 +212,11 @@ class DashboardWindow(QMainWindow):
             # Load CSV file into pandas DataFrame
             df = pd.read_csv(self.csv_path)
             
-            # Print the first few rows for debugging
-            print("CSV Data Sample:")
-            print(df.head())
-            
             # Convert dates from strings to datetime objects
             df['Start Time'] = pd.to_datetime(df['Start Time'], format='%m/%d/%Y %I:%M %p', errors='coerce')
             
             # Handle potential parsing errors
             if df['Start Time'].isna().any():
-                print("Warning: Some dates couldn't be parsed. Using alternative format.")
                 # Try alternative format
                 mask = df['Start Time'].isna()
                 df.loc[mask, 'Start Time'] = pd.to_datetime(df.loc[mask, 'Start Time'], errors='ignore')
@@ -248,12 +247,30 @@ class DashboardWindow(QMainWindow):
             for month in months:
                 self.month_combo.addItem(month_names[month], month)
             
-            # Update the dashboard with initial data
+            # Set default selection to the latest month/year
+            # Find the latest date in the dataframe
+            latest_date = df['Start Time'].max()
+            if not pd.isna(latest_date):
+                latest_month = latest_date.month
+                latest_year = latest_date.year
+                
+                # Find and select the latest year in the combobox
+                for i in range(self.year_combo.count()):
+                    if self.year_combo.itemData(i) == latest_year:
+                        self.year_combo.setCurrentIndex(i)
+                        break
+                
+                # Find and select the latest month in the combobox
+                for i in range(self.month_combo.count()):
+                    if self.month_combo.itemData(i) == latest_month:
+                        self.month_combo.setCurrentIndex(i)
+                        break
+            
+            # Update the dashboard
             self.update_dashboard()
             
-        except Exception as e:
+        except Exception:
             # If there's an error loading the CSV, display empty dashboard
-            print(f"Error loading data: {e}")
             self.aggregate_table.setRowCount(0)
             self.raw_table.setRowCount(0)
     
@@ -272,13 +289,9 @@ class DashboardWindow(QMainWindow):
             selected_month = self.month_combo.itemData(month_idx)
             selected_year = self.year_combo.itemData(year_idx)
             
-            print(f"Selected month: {selected_month}, Selected year: {selected_year}")
-            
             # Filter data for selected month and year
             filtered_df = self.df[(self.df['Month'] == selected_month) & 
                                   (self.df['Year'] == selected_year)]
-                                  
-            print(f"Found {len(filtered_df)} entries for selected month/year")
             
             # Update the raw table with all entries
             self.update_raw_table(filtered_df)
@@ -286,10 +299,8 @@ class DashboardWindow(QMainWindow):
             # Update the aggregate table with daily totals
             self.update_aggregate_table(filtered_df)
                 
-        except Exception as e:
-            print(f"Error updating dashboard: {e}")
-            import traceback
-            traceback.print_exc()
+        except Exception:
+            pass
     
     def parse_duration(self, duration_str):
         """Parse duration string into minutes, handling various formats."""
@@ -358,10 +369,8 @@ class DashboardWindow(QMainWindow):
                 
                 self.aggregate_table.setItem(i, 0, date_item)
                 self.aggregate_table.setItem(i, 1, hours_item)
-        except Exception as e:
-            print(f"Error in update_aggregate_table: {e}")
-            import traceback
-            traceback.print_exc()
+        except Exception:
+            pass
     
     def update_raw_table(self, filtered_df):
         """Update the raw table with all entries for the selected month/year."""
@@ -393,7 +402,5 @@ class DashboardWindow(QMainWindow):
                 self.raw_table.setItem(i, 1, end_time)
                 self.raw_table.setItem(i, 2, duration)
                 self.raw_table.setItem(i, 3, description)
-        except Exception as e:
-            print(f"Error in update_raw_table: {e}")
-            import traceback
-            traceback.print_exc()
+        except Exception:
+            pass
