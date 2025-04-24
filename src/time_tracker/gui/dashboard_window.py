@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                             QLabel, QComboBox, QPushButton, QTableWidget, QTableWidgetItem,
-                            QHeaderView, QTabWidget)
+                            QHeaderView, QTabWidget, QTabBar)
 from PyQt6.QtCore import Qt
 import pandas as pd
 import os
@@ -127,11 +127,23 @@ class DashboardWindow(QMainWindow):
             QTabBar::tab:hover:!selected {
                 background-color: #3A3A47;
             }
+            QTabWidget > QTabBar {
+                alignment: left;
+            }
         """)
-        # Set tab position to the left
+        
+        # Force left alignment of tabs
         self.tab_widget.setTabPosition(QTabWidget.TabPosition.North)
-        # Set tab alignment to left
         self.tab_widget.tabBar().setExpanding(False)
+        
+        # Create a custom tab bar layout
+        tab_bar_layout = QHBoxLayout()
+        tab_bar_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        tab_bar_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Add the tab bar layout to the tab widget
+        tab_bar_container = QWidget()
+        tab_bar_container.setLayout(tab_bar_layout)
         
         # Create aggregate tab
         aggregate_tab = QWidget()
@@ -383,13 +395,19 @@ class DashboardWindow(QMainWindow):
                 if pd.notna(row['Start Time']):
                     start_time_str = row['Start Time'].strftime('%m/%d/%Y %I:%M %p')
                 else:
-                    start_time_str = str(row['Start Time'])
+                    start_time_str = ""
                 
                 # Create table items
                 start_time = QTableWidgetItem(start_time_str)
                 end_time = QTableWidgetItem(str(row['End Time']))
                 duration = QTableWidgetItem(str(row['Duration']))
-                description = QTableWidgetItem(str(row['Work Description']))
+                
+                # Handle "nan" in the work description - replace with empty string
+                work_description = str(row['Work Description'])
+                if work_description.lower() == "nan":
+                    work_description = ""
+                    
+                description = QTableWidgetItem(work_description)
                 
                 # Set alignment
                 start_time.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
