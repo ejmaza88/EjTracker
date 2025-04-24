@@ -67,6 +67,8 @@ class TimeTrackerWindow(QMainWindow):
         start_label.setStyleSheet("font-size: 14px;")
         start_value = QLabel(self.start_time_str)
         start_value.setStyleSheet("font-size: 14px;")
+        # Make text selectable
+        start_value.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         start_layout.addWidget(start_label)
         start_layout.addWidget(start_value)
         
@@ -77,6 +79,8 @@ class TimeTrackerWindow(QMainWindow):
         end_label.setStyleSheet("font-size: 14px;")
         end_value = QLabel(self.end_time_str)
         end_value.setStyleSheet("font-size: 14px;")
+        # Make text selectable
+        end_value.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         end_layout.addWidget(end_label)
         end_layout.addWidget(end_value)
         
@@ -91,6 +95,8 @@ class TimeTrackerWindow(QMainWindow):
         
         total_value = QLabel(self.total_time_str)
         total_value.setStyleSheet("font-size: 14px;")
+        # Make text selectable
+        total_value.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         content_layout.addWidget(total_value)
         total_value.setContentsMargins(0, 0, 0, 2)  # Add a small bottom margin
         
@@ -153,6 +159,14 @@ class TimeTrackerWindow(QMainWindow):
         content_layout.addSpacing(5)
         content_layout.addLayout(button_layout)
         main_layout.addWidget(content)
+        
+    # Helper method to create selectable labels
+    def create_selectable_label(self, text, style="font-size: 14px;"):
+        """Create a QLabel with selectable text"""
+        label = QLabel(text)
+        label.setStyleSheet(style)
+        label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        return label
         
     def save_entry(self):
         """Save the time entry to a CSV file"""
