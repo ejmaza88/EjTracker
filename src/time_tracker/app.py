@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QApplication
 from datetime import datetime
 from time_tracker.utils.time_manager import TimeManager
 from time_tracker.gui.main_window import TimeTrackerWindow
+from time_tracker.gui.dashboard_window import DashboardWindow
 
 class TimeTrackerApp(rumps.App):
     def __init__(self):
@@ -28,6 +29,10 @@ class TimeTrackerApp(rumps.App):
         # Add the tracking menu item with a proper callback
         tracking_item = rumps.MenuItem(self.tracking_action_name, callback=self.toggle_tracking)
         self.menu.add(tracking_item)
+        
+        # Add dashboard menu item
+        dashboard_item = rumps.MenuItem("Dashboard", callback=self.show_dashboard)
+        self.menu.add(dashboard_item)
         
         # Add quit button with proper label
         quit_item = rumps.MenuItem("Quit", callback=self.quit_app)
@@ -54,8 +59,8 @@ class TimeTrackerApp(rumps.App):
             # Add new menu item with updated title at the beginning
             new_item = rumps.MenuItem(new_action_name, callback=self.toggle_tracking)
             
-            # Insert at the beginning (before the Quit item)
-            self.menu.insert_before("Quit", new_item)
+            # Insert at the beginning (before the Dashboard item)
+            self.menu.insert_before("Dashboard", new_item)
             
             # Update stored action name
             self.tracking_action_name = new_action_name
@@ -72,6 +77,16 @@ class TimeTrackerApp(rumps.App):
         
         # Update menu text and icon
         self.update_menu()
+    
+    def show_dashboard(self, _):
+        """Show the dashboard window with PyQt"""
+        app = QApplication.instance()
+        if app is None:
+            app = QApplication(sys.argv)
+        
+        dashboard = DashboardWindow()
+        dashboard.show()
+        app.exec()
     
     def quit_app(self, _):
         """Custom quit handler to ensure tracking is stopped before quitting"""
