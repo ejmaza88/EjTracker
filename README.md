@@ -34,3 +34,7 @@ time_tracker
 
 ---
 <img width="417" height="130" alt="image" src="https://github.com/user-attachments/assets/2100ef15-91e1-47e1-80bc-964013654f85" />
+
+---
+<img width="373" height="226" alt="image" src="https://github.com/user-attachments/assets/1604503e-12ec-494c-8ee7-eb668548b0ef" />
+
