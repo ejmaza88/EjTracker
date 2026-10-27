@@ -31,3 +31,6 @@ time_tracker
 - Click the stopwatch icon in the menu bar to start tracking
 - Click again to stop tracking and enter details about your work
 - Time entries are saved to `~/.time_tracker/time_entries.csv`
+
+---
+<img width="417" height="130" alt="image" src="https://github.com/user-attachments/assets/2100ef15-91e1-47e1-80bc-964013654f85" />
